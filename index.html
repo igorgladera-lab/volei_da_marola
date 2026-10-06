@@ -10,7 +10,7 @@
 <meta name="apple-mobile-web-app-title" content="Vôlei da Marola">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230d7377'/%3E%3Ccircle cx='50' cy='50' r='38' fill='%23fff'/%3E%3Cpath d='M50 12 Q30 50 50 88' stroke='%23f5c518' stroke-width='4' fill='none'/%3E%3Cpath d='M12 50 Q50 30 88 50' stroke='%23f5c518' stroke-width='4' fill='none'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8F%90%3C/text%3E%3C/svg%3E">
 <title>Vôlei da Marola</title>
 <style>
 :root{
@@ -53,25 +53,73 @@ body{
   font-size:15px;
   line-height:1.4;
 }
+
+/* ---------- HEADER (com título centralizado) ---------- */
 .app-header{
-  position:sticky;top:0;z-index:50;
+  position:sticky;
+  top:0;
+  z-index:50;
   background:var(--azul);
   color:#fff;
-  padding:12px 14px;
-  display:flex;align-items:center;gap:10px;
+  padding:12px 60px;                       /* espaço lateral p/ não colidir com o botão */
   box-shadow:var(--sombra);
   padding-top:calc(12px + env(safe-area-inset-top));
+  display:flex;
+  align-items:center;
+  justify-content:center;                  /* centraliza o bloco */
 }
-.app-header h1{font-size:17px;margin:0;font-weight:700;letter-spacing:.3px}
-.app-header small{font-size:12px;opacity:.85;margin-left:4px}
-.app-header .spacer{flex:1}
+.app-header .titulo-centro{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  text-align:center;
+  min-width:0;
+}
+.app-header h1{
+  font-size:17px;
+  margin:0;
+  font-weight:700;
+  letter-spacing:.3px;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.app-header small{
+  font-size:12px;
+  opacity:.85;
+  white-space:nowrap;
+}
 .btn-tema{
+  position:absolute;
+  right:14px;
+  top:50%;
+  transform:translateY(-50%);
   background:rgba(255,255,255,.18);
-  border:none;color:#fff;width:38px;height:38px;
-  border-radius:50%;font-size:18px;cursor:pointer;
+  border:none;
+  color:#fff;
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  font-size:18px;
+  cursor:pointer;
   transition:background .15s,transform .1s;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
 }
-.btn-tema:active{transform:scale(.92);background:rgba(255,255,255,.30)}
+.btn-tema:active{
+  transform:translateY(-50%) scale(.92);
+  background:rgba(255,255,255,.30);
+}
+/* Ajusta o botão quando há safe-area (iPhone com notch) */
+@supports (padding-top: env(safe-area-inset-top)){
+  .btn-tema{
+    top:calc(50% + env(safe-area-inset-top) / 2);
+  }
+}
+
 .container{padding:12px;max-width:680px;margin:0 auto}
 .card{
   background:var(--card);
@@ -426,9 +474,10 @@ textarea{
 <body>
 
 <header class="app-header">
-  <h1>🏐 Vôlei da Marola</h1>
-  <small id="dataHoje">—</small>
-  <div class="spacer"></div>
+  <div class="titulo-centro">
+    <h1>🏐 Vôlei da Marola</h1>
+    <small id="dataHoje">—</small>
+  </div>
   <button class="btn-tema" id="btnTema" title="Alternar tema">🌙</button>
 </header>
 
@@ -685,7 +734,6 @@ function renderJogadores(){
     chip.textContent = nome;
     chip.dataset.nome = nome;
 
-    // clique curto → edita
     let timerLongo = null;
     let suprimiu = false;
 
@@ -737,14 +785,12 @@ function confirmarJogador(){
   const dia = DB.dias[HOJE];
 
   if (jogadorEditando){
-    // editar
     if (nome !== jogadorEditando && dia.jogadores.includes(nome)){
       mostrarToast("Já existe um jogador com esse nome");
       return;
     }
     const idx = dia.jogadores.indexOf(jogadorEditando);
     if (idx >= 0) dia.jogadores[idx] = nome;
-    // atualiza nos times? não — snapshot preservado.
     jogadorEditando = null;
     $("btnConfirmaJog").textContent = "✓";
     $("btnCancelaJog").classList.add("hidden");
@@ -773,7 +819,6 @@ function excluirJogador(nome){
   renderJogadores();
   mostrarToast("Jogador removido");
   vibrar(15);
-  // NÃO remove dos times (snapshot preservado)
 }
 
 $("btnConfirmaJog").addEventListener("click", confirmarJogador);
@@ -811,7 +856,7 @@ function renderTimes(){
         const acao = e.target.dataset.acao;
         if (acao === "editar"){ abrirModalTime(t.id); }
         else if (acao === "excluir"){ excluirTime(t.id); }
-        else { abrirModalTime(t.id); } // clique no card abre o modal
+        else { abrirModalTime(t.id); }
       });
       box.appendChild(el);
     });
@@ -954,7 +999,6 @@ $("btnAddTime").addEventListener("click", ()=>{
     mostrarToast("Já existe um time com esse nome");
     return;
   }
-  // cria vazio e abre modal já com nome preenchido
   const novo = { id: gerarId("t_"), nome, jogadores: [] };
   dia.times.push(novo);
   salvar();
@@ -1027,7 +1071,6 @@ function validarPartida(){
     return null;
   }
 
-  // Regra: nenhum jogador pode estar nos dois times
   const comuns = time1.jogadores.filter(j=>time2.jogadores.includes(j));
   if (comuns.length > 0){
     mostrarToast(`${comuns[0]} está nos dois times. Um jogador não pode jogar pelos dois lados na mesma partida.`, 3500);
@@ -1101,7 +1144,6 @@ $("btnInicio").addEventListener("click", iniciarPartida);
 $("btnFim").addEventListener("click", finalizarPartida);
 $("btnCancelaEdicao").addEventListener("click", cancelarEdicao);
 
-// Botões + e −
 document.querySelectorAll(".btn-ponto").forEach(btn=>{
   btn.addEventListener("click", ()=>{
     const alvo = btn.dataset.alvo;
@@ -1115,7 +1157,6 @@ document.querySelectorAll(".btn-ponto").forEach(btn=>{
   });
 });
 
-// Atualiza info ao trocar time
 $("selectTime1").addEventListener("change", atualizarInfoTimes);
 $("selectTime2").addEventListener("change", atualizarInfoTimes);
 
@@ -1146,13 +1187,6 @@ function renderPartidas(){
       item.className = "partida-item" + (partidaEditando?.id === p.id ? " editando" : "");
       const dur = calcularDuracao(p.horaInicio, p.horaFim);
 
-      const jogadoresHTML = `
-        <div class="partida-jogadores">
-          <div class="linha-j"><span class="rotulo">${p.time1.nome}:</span><span>${p.time1.jogadores.join(" / ")}</span></div>
-          <div class="linha-j"><span class="rotulo">${p.time2.nome}:</span><span>${p.time2.jogadores.join(" / ")}</span></div>
-        </div>
-      `;
-
       item.innerHTML = `
         <div class="partida-header">
           <span class="num">jogo ${i+1}</span>
@@ -1174,10 +1208,12 @@ function renderPartidas(){
           <span class="trofeu">${vencedor==="time2"?"🏆":""}</span>
         </div>
         <button class="toggle-jogadores" data-acao="toggle">▸ ver jogadores</button>
-        <div class="partida-jogadores hidden">${jogadoresHTML.replace('<div class="partida-jogadores">','').replace(/<\/div>$/,'')}</div>
+        <div class="partida-jogadores hidden">
+          <div class="linha-j"><span class="rotulo">${p.time1.nome}:</span><span>${p.time1.jogadores.join(" / ")}</span></div>
+          <div class="linha-j"><span class="rotulo">${p.time2.nome}:</span><span>${p.time2.jogadores.join(" / ")}</span></div>
+        </div>
       `;
 
-      // corrige estrutura (o replace acima ficou feio); refaz de forma limpa:
       const toggle = item.querySelector('[data-acao="toggle"]');
       const jogDiv = item.querySelector(".partida-jogadores");
       toggle.addEventListener("click", ()=>{
@@ -1215,7 +1251,6 @@ function editarPartida(id){
   $("horaInicio").value = p.horaInicio;
   $("horaFim").value = p.horaFim;
 
-  // Se os times não existem mais no cadastro, adiciona opção temporária
   [["selectTime1", p.time1], ["selectTime2", p.time2]].forEach(([sid, t])=>{
     const sel = $(sid);
     if (!Array.from(sel.options).some(o=>o.value === t.id)){
@@ -1253,7 +1288,7 @@ function excluirPartida(id){
 }
 
 // ============================================================
-// COMPARTILHAR / COPIAR / IMPORTAR PARTIDA
+// COMPARTILHAR / COPIAR
 // ============================================================
 function montarPacotePartida(p){
   return {
@@ -1280,7 +1315,6 @@ async function compartilharPartida(id){
   const json = JSON.stringify(pacote, null, 2);
   const nomeArq = `partida_${HOJE}_${p.horaInicio.replace(":","")}_${p.id.slice(-5)}.json`;
 
-  // tenta share
   try{
     const file = new File([json], nomeArq, { type: "text/plain" });
     if (navigator.canShare && navigator.canShare({ files: [file] })){
@@ -1290,7 +1324,6 @@ async function compartilharPartida(id){
     throw new Error("share indisponível");
   }catch(err){
     if (err.name === "AbortError") return;
-    // fallback download
     try{
       const blob = new Blob([json], { type: "application/json" });
       const url = URL.createObjectURL(blob);
@@ -1316,7 +1349,6 @@ async function copiarPartida(id){
     vibrar(10);
     mostrarToast("Partida copiada! Cole no WhatsApp/e-mail.");
   }catch(e){
-    // fallback
     const ta = document.createElement("textarea");
     ta.value = json;
     ta.style.position = "fixed"; ta.style.opacity = "0";
@@ -1391,7 +1423,6 @@ function processarImportacaoPartida(texto){
     time1: { ...p.time1, jogadores: [...p.time1.jogadores] },
     time2: { ...p.time2, jogadores: [...p.time2.jogadores] }
   });
-  // ordena por horário
   dia.partidas.sort((a,b)=> a.horaInicio.localeCompare(b.horaInicio));
 
   salvar();
@@ -1451,7 +1482,6 @@ function renderHistorico(){
         excluirDiaCompleto(d);
       });
 
-      // conteúdo
       const linhas = dia.partidas.map((p, i)=>{
         const v = p.time1.placar > p.time2.placar ? 1 : 2;
         return `
@@ -1467,7 +1497,6 @@ function renderHistorico(){
     });
   }
 
-  // select de exportação
   const sel = $("selectDataExport");
   sel.innerHTML = "";
   datas.forEach(d=>{
@@ -1523,10 +1552,10 @@ $("btnFechaHist").addEventListener("click", ()=>{
 // EXPORTAÇÃO .TXT
 // ============================================================
 function calcularEstatisticas(dia){
-  const mapa = {}; // nome → { jogos, vitorias, pontos }
+  const mapa = {};
   dia.partidas.forEach(p=>{
     const vencedor = p.time1.placar > p.time2.placar ? "time1" : "time2";
-    [["time1","time2"],["time2","time1"]].forEach(([lado, outro])=>{
+    [["time1","time2"],["time2","time1"]].forEach(([lado])=>{
       p[lado].jogadores.forEach(j=>{
         if (!mapa[j]) mapa[j] = { jogos: 0, vitorias: 0, pontos: 0 };
         mapa[j].jogos++;
@@ -1538,7 +1567,7 @@ function calcularEstatisticas(dia){
   return mapa;
 }
 function calcularEstatisticasTimes(dia){
-  const mapa = {}; // nome do time → { jogos, vitorias, pontos }
+  const mapa = {};
   dia.partidas.forEach(p=>{
     const vencedor = p.time1.placar > p.time2.placar ? "time1" : "time2";
     ["time1","time2"].forEach(lado=>{
@@ -1568,7 +1597,6 @@ function gerarTxt(data, formato){
     });
   }
 
-  // estatística por jogador
   const est = calcularEstatisticas(dia);
   const nomes = Object.keys(est).sort();
   linhas.push("── POR JOGADOR ──");
@@ -1582,7 +1610,6 @@ function gerarTxt(data, formato){
     }
   });
 
-  // estatística por time
   const estT = calcularEstatisticasTimes(dia);
   const nomesT = Object.keys(estT).sort();
   linhas.push("");
@@ -1659,7 +1686,6 @@ $("inputBackup").addEventListener("change", (e)=>{
         mostrarToast("Backup inválido");
         return;
       }
-      // normaliza
       for (const d in novoDB.dias){
         const dia = novoDB.dias[d];
         dia.jogadores = normalizarNomesArray(dia.jogadores || []);
