@@ -1,0 +1,1733 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0d7377">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Vôlei da Marola">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='%230d7377'/%3E%3Ccircle cx='50' cy='50' r='38' fill='%23fff'/%3E%3Cpath d='M50 12 Q30 50 50 88' stroke='%23f5c518' stroke-width='4' fill='none'/%3E%3Cpath d='M12 50 Q50 30 88 50' stroke='%23f5c518' stroke-width='4' fill='none'/%3E%3C/svg%3E">
+<title>Vôlei da Marola</title>
+<style>
+:root{
+  --azul:#0d7377;
+  --azul-esc:#095255;
+  --azul-claro:#e0f4f4;
+  --amarelo:#f5c518;
+  --fundo:#f5f9f9;
+  --card:#ffffff;
+  --texto:#1a1a1a;
+  --borda:#c8dede;
+  --verde:#2e8b57;
+  --cinza:#8a94a3;
+  --cinza-desc:#c8cdd6;
+  --vermelho:#d9534f;
+  --sombra:0 2px 8px rgba(13,115,119,.10);
+}
+body.escuro{
+  --azul:#2ba8ad;
+  --azul-esc:#1d7d81;
+  --azul-claro:#123a3c;
+  --fundo:#0d1518;
+  --card:#182228;
+  --texto:#e8f0f0;
+  --borda:#264045;
+  --cinza-desc:#3a4152;
+  --sombra:0 2px 8px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  background:var(--fundo);
+  color:var(--texto);
+  min-height:100vh;
+  min-height:100dvh;
+  padding-top:env(safe-area-inset-top);
+  padding-bottom:env(safe-area-inset-bottom);
+  transition:background .2s,color .2s;
+  font-size:15px;
+  line-height:1.4;
+}
+.app-header{
+  position:sticky;top:0;z-index:50;
+  background:var(--azul);
+  color:#fff;
+  padding:12px 14px;
+  display:flex;align-items:center;gap:10px;
+  box-shadow:var(--sombra);
+  padding-top:calc(12px + env(safe-area-inset-top));
+}
+.app-header h1{font-size:17px;margin:0;font-weight:700;letter-spacing:.3px}
+.app-header small{font-size:12px;opacity:.85;margin-left:4px}
+.app-header .spacer{flex:1}
+.btn-tema{
+  background:rgba(255,255,255,.18);
+  border:none;color:#fff;width:38px;height:38px;
+  border-radius:50%;font-size:18px;cursor:pointer;
+  transition:background .15s,transform .1s;
+}
+.btn-tema:active{transform:scale(.92);background:rgba(255,255,255,.30)}
+.container{padding:12px;max-width:680px;margin:0 auto}
+.card{
+  background:var(--card);
+  border-radius:12px;
+  padding:14px;
+  margin-bottom:12px;
+  box-shadow:var(--sombra);
+  transition:background .2s;
+}
+.card h2{
+  font-size:13px;margin:0 0 10px 0;
+  text-transform:uppercase;letter-spacing:.8px;
+  color:var(--azul);font-weight:700;
+  display:flex;align-items:center;gap:6px;
+}
+.card h2 .spacer{flex:1}
+.card h2 .badge{
+  background:var(--azul-claro);color:var(--azul);
+  font-size:11px;padding:2px 8px;border-radius:10px;
+  font-weight:700;letter-spacing:.5px;
+}
+input[type=text],input[type=time],input[type=number],select{
+  width:100%;
+  padding:10px 12px;
+  border:1.5px solid var(--borda);
+  border-radius:8px;
+  background:var(--card);
+  color:var(--texto);
+  font-size:15px;
+  font-family:inherit;
+  outline:none;
+  transition:border-color .15s,background .2s;
+}
+input:focus,select:focus{border-color:var(--azul)}
+input[readonly]{background:var(--azul-claro);cursor:not-allowed}
+input.nome-input{text-transform:uppercase}
+.row{display:flex;gap:8px;align-items:center}
+.row input{flex:1}
+.btn{
+  border:none;border-radius:8px;
+  padding:10px 14px;font-size:14px;font-weight:600;
+  cursor:pointer;font-family:inherit;
+  transition:transform .08s,background .15s,opacity .15s;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+}
+.btn:active{transform:scale(.95)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-azul{background:var(--azul);color:#fff}
+.btn-azul:hover:not(:disabled){background:var(--azul-esc)}
+.btn-amarelo{background:var(--amarelo);color:#1a1a1a}
+.btn-cinza{background:var(--cinza);color:#fff}
+.btn-vermelho{background:var(--vermelho);color:#fff}
+.btn-icon{
+  width:42px;height:42px;padding:0;font-size:18px;
+  background:var(--azul);color:#fff;flex-shrink:0;
+}
+.btn-icon.btn-x{background:var(--cinza)}
+
+.chips{
+  display:flex;flex-wrap:wrap;gap:6px;
+  margin-top:10px;min-height:34px;
+  padding:8px;border:1.5px dashed var(--borda);
+  border-radius:8px;
+}
+.chips:empty::before{
+  content:"Nenhum jogador cadastrado";
+  font-size:12px;color:var(--cinza);font-style:italic;
+}
+.chip{
+  background:var(--azul-claro);
+  color:var(--azul);
+  padding:6px 12px;border-radius:16px;
+  font-size:13px;font-weight:700;letter-spacing:.3px;
+  cursor:pointer;user-select:none;
+  transition:transform .1s,background .15s;
+  border:1.5px solid transparent;
+}
+.chip:active{transform:scale(.94)}
+.chip.editando{
+  background:var(--amarelo);color:#1a1a1a;
+  border-color:#c9a314;
+}
+
+/* Times */
+.time-card{
+  display:flex;align-items:center;gap:10px;
+  background:var(--azul-claro);
+  border-radius:10px;
+  padding:10px 12px;
+  margin-top:8px;
+  cursor:pointer;
+  border:1.5px solid transparent;
+  transition:transform .1s,border-color .15s;
+}
+.time-card:active{transform:scale(.98)}
+.time-card .nome-time{
+  font-weight:700;color:var(--azul);
+  font-size:14px;letter-spacing:.4px;
+}
+.time-card .qtd{
+  font-size:12px;color:var(--cinza);margin-top:2px;
+}
+.time-card .spacer{flex:1}
+.time-card .btn-mini{
+  background:rgba(255,255,255,.6);
+  border:none;width:32px;height:32px;border-radius:50%;
+  font-size:14px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
+body.escuro .time-card .btn-mini{background:rgba(0,0,0,.3);color:#fff}
+
+/* Partida */
+.horarios{display:flex;gap:10px;margin-bottom:12px}
+.horarios > div{flex:1}
+.horarios label{font-size:11px;color:var(--cinza);text-transform:uppercase;letter-spacing:.5px;font-weight:600;display:block;margin-bottom:4px}
+
+.dupla-box{
+  background:var(--azul-claro);
+  border-radius:10px;
+  padding:10px;
+  margin-bottom:10px;
+}
+.dupla-box .linha{
+  display:grid;
+  grid-template-columns:1fr 60px 38px 38px;
+  gap:6px;
+  align-items:center;
+}
+.dupla-box .jogadores-info{
+  font-size:12px;color:var(--azul);margin-top:6px;
+  padding-left:4px;font-weight:600;
+  min-height:16px;
+  letter-spacing:.3px;
+}
+.dupla-box .jogadores-info.vazio{color:var(--cinza);font-style:italic;font-weight:400}
+input.placar{text-align:center;font-weight:700;font-size:16px;padding:8px 4px}
+
+.btn-ponto{
+  width:38px;height:38px;border-radius:8px;
+  border:none;font-size:18px;font-weight:700;
+  cursor:pointer;transition:transform .06s,background .15s;
+  display:flex;align-items:center;justify-content:center;
+  padding:0;
+}
+.btn-mais{background:var(--verde);color:#fff}
+.btn-menos{background:var(--cinza);color:#fff}
+.btn-ponto:disabled{background:var(--cinza-desc);cursor:not-allowed;opacity:.6}
+.btn-ponto:not(:disabled):active{transform:scale(.92)}
+
+.acoes-partida{display:flex;gap:8px;margin-top:12px}
+.acoes-partida .btn{flex:1;padding:12px}
+
+.banner-edicao{
+  background:var(--amarelo);color:#1a1a1a;
+  padding:10px 12px;border-radius:8px;
+  margin-bottom:10px;font-size:13px;font-weight:700;
+  display:flex;align-items:center;gap:8px;
+}
+.banner-edicao .btn{
+  background:rgba(0,0,0,.15);color:#1a1a1a;
+  padding:6px 10px;font-size:12px;margin-left:auto;
+}
+.hidden{display:none !important}
+
+/* Lista de partidas */
+.card-partidas .lista{
+  max-height:45vh;overflow-y:auto;
+  margin:-4px;padding:4px;
+}
+.partida-item{
+  background:var(--card);
+  border:1.5px solid var(--borda);
+  border-radius:10px;
+  padding:10px;
+  margin-bottom:8px;
+  transition:border-color .15s,background .15s;
+}
+.partida-item.editando{border-color:var(--amarelo);border-width:2px}
+.partida-header{
+  display:flex;align-items:center;gap:8px;
+  font-size:12px;color:var(--cinza);
+  margin-bottom:6px;
+}
+.partida-header .num{font-weight:700;color:var(--azul)}
+.partida-header .spacer{flex:1}
+.partida-header .btn-mini{
+  background:transparent;border:none;
+  padding:4px 6px;font-size:15px;cursor:pointer;
+  border-radius:6px;transition:background .1s;
+}
+.partida-header .btn-mini:active{background:var(--azul-claro)}
+.partida-linha{
+  display:flex;align-items:center;gap:8px;
+  padding:4px 0;font-size:14px;
+}
+.partida-linha .nome-time{flex:1;font-weight:600}
+.partida-linha .placar-time{font-weight:700;font-size:16px;min-width:28px;text-align:right}
+.partida-linha.vencedor{color:var(--azul)}
+.partida-linha.vencedor .nome-time{font-weight:700}
+.partida-linha.perdedor{color:var(--cinza)}
+.partida-linha .trofeu{font-size:14px}
+.partida-jogadores{
+  margin-top:8px;padding-top:8px;
+  border-top:1px dashed var(--borda);
+  font-size:12px;color:var(--cinza);
+}
+.partida-jogadores .linha-j{display:flex;gap:6px;padding:2px 0}
+.partida-jogadores .rotulo{font-weight:700;color:var(--azul);min-width:90px}
+.toggle-jogadores{
+  background:transparent;border:none;
+  color:var(--azul);font-size:11px;
+  cursor:pointer;padding:4px 0;
+  font-weight:700;letter-spacing:.3px;
+}
+
+/* Histórico overlay */
+.overlay{
+  position:fixed;inset:0;z-index:100;
+  background:rgba(0,0,0,.55);
+  display:flex;align-items:flex-end;justify-content:center;
+  padding:0;
+}
+.overlay.hidden{display:none}
+.overlay-conteudo{
+  background:var(--fundo);
+  width:100%;max-width:680px;
+  max-height:92vh;
+  border-radius:16px 16px 0 0;
+  padding:16px;
+  overflow-y:auto;
+  padding-bottom:calc(16px + env(safe-area-inset-bottom));
+}
+.overlay-header{
+  display:flex;align-items:center;gap:8px;margin-bottom:14px;
+}
+.overlay-header h2{margin:0;font-size:16px;color:var(--azul)}
+.overlay-header .btn-close{
+  margin-left:auto;background:var(--cinza);color:#fff;
+  border:none;width:34px;height:34px;border-radius:50%;
+  font-size:16px;cursor:pointer;
+}
+.dia-bloco{
+  background:var(--card);border-radius:10px;
+  margin-bottom:8px;box-shadow:var(--sombra);
+  overflow:hidden;
+}
+.dia-header{
+  display:flex;align-items:center;gap:8px;
+  padding:12px;cursor:pointer;
+  transition:background .15s;
+}
+.dia-header:active{background:var(--azul-claro)}
+.dia-header .data{font-weight:700;color:var(--azul);flex:1}
+.dia-header .qtd{font-size:12px;color:var(--cinza)}
+.dia-header .btn-lixo{
+  background:transparent;border:none;
+  color:var(--vermelho);font-size:16px;cursor:pointer;
+  padding:4px 8px;border-radius:6px;
+}
+.dia-header .btn-lixo:active{background:rgba(217,83,79,.15)}
+.dia-header .seta{transition:transform .2s;font-size:12px}
+.dia-header.aberto .seta{transform:rotate(180deg)}
+.dia-partidas{
+  padding:0 12px 12px 12px;
+  border-top:1px solid var(--borda);
+}
+
+/* Backup/export */
+.secao-hist{
+  background:var(--card);border-radius:10px;
+  padding:12px;margin-top:12px;
+  box-shadow:var(--sombra);
+}
+.secao-hist h3{
+  margin:0 0 10px 0;font-size:13px;
+  color:var(--azul);text-transform:uppercase;
+  letter-spacing:.6px;
+}
+.secao-hist .campo{margin-bottom:10px}
+.secao-hist label{
+  font-size:11px;color:var(--cinza);
+  text-transform:uppercase;letter-spacing:.5px;
+  font-weight:600;display:block;margin-bottom:4px;
+}
+
+/* Toast */
+.toast{
+  position:fixed;bottom:20px;left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:#1a1a1a;color:#fff;
+  padding:12px 20px;border-radius:24px;
+  font-size:13px;font-weight:600;
+  box-shadow:0 4px 16px rgba(0,0,0,.3);
+  opacity:0;transition:transform .25s,opacity .25s;
+  z-index:200;max-width:90vw;text-align:center;
+}
+.toast.ativo{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* Modal */
+.modal{
+  position:fixed;inset:0;z-index:150;
+  background:rgba(0,0,0,.6);
+  display:flex;align-items:center;justify-content:center;
+  padding:16px;
+}
+.modal.hidden{display:none}
+.modal-box{
+  background:var(--card);border-radius:14px;
+  width:100%;max-width:460px;
+  max-height:90vh;overflow-y:auto;
+  padding:16px;
+  box-shadow:0 8px 32px rgba(0,0,0,.3);
+}
+.modal-box h3{margin:0 0 12px 0;font-size:16px;color:var(--azul)}
+.modal-lista{
+  max-height:50vh;overflow-y:auto;
+  border:1.5px solid var(--borda);
+  border-radius:8px;padding:6px;
+  margin:10px 0;
+}
+.modal-lista label{
+  display:flex;align-items:center;gap:10px;
+  padding:10px;border-radius:6px;cursor:pointer;
+  font-weight:600;font-size:14px;letter-spacing:.3px;
+  transition:background .15s;
+}
+.modal-lista label:active{background:var(--azul-claro)}
+.modal-lista input[type=checkbox]{
+  width:20px;height:20px;accent-color:var(--azul);
+  flex-shrink:0;
+}
+.modal-acoes{display:flex;gap:8px;margin-top:10px}
+.modal-acoes .btn{flex:1;padding:12px}
+.contador-sel{
+  text-align:center;font-size:12px;
+  color:var(--cinza);margin-top:8px;font-weight:600;
+}
+textarea{
+  width:100%;min-height:120px;
+  padding:10px;border:1.5px solid var(--borda);
+  border-radius:8px;font-family:monospace;font-size:12px;
+  background:var(--card);color:var(--texto);
+  resize:vertical;
+}
+
+.vazio-msg{
+  text-align:center;color:var(--cinza);
+  font-size:13px;padding:20px;font-style:italic;
+}
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <h1>🏐 Vôlei da Marola</h1>
+  <small id="dataHoje">—</small>
+  <div class="spacer"></div>
+  <button class="btn-tema" id="btnTema" title="Alternar tema">🌙</button>
+</header>
+
+<div class="container">
+
+  <!-- JOGADORES -->
+  <div class="card">
+    <h2>👥 Jogadores <span class="spacer"></span><span class="badge" id="badgeJog">0</span></h2>
+    <div class="row">
+      <input type="text" id="inputJogador" class="nome-input" placeholder="Nome do jogador" autocapitalize="characters" autocomplete="off">
+      <button class="btn btn-icon" id="btnConfirmaJog" title="Adicionar">✓</button>
+      <button class="btn btn-icon btn-x hidden" id="btnCancelaJog" title="Cancelar">×</button>
+    </div>
+    <div class="chips" id="chipsJogadores"></div>
+  </div>
+
+  <!-- TIMES -->
+  <div class="card">
+    <h2>🏆 Times do dia <span class="spacer"></span><span class="badge" id="badgeTimes">0</span></h2>
+    <div class="row">
+      <input type="text" id="inputTime" class="nome-input" placeholder="Nome do time" autocapitalize="characters" autocomplete="off">
+      <button class="btn btn-icon" id="btnAddTime" title="Adicionar time">+</button>
+    </div>
+    <div id="listaTimes"></div>
+  </div>
+
+  <!-- PARTIDA EM ANDAMENTO -->
+  <div class="card">
+    <h2>🏐 Partida em andamento</h2>
+    <div id="bannerEdicao" class="banner-edicao hidden">
+      ✏ Editando jogo <span id="numEditando"></span>
+      <button class="btn" id="btnCancelaEdicao">Cancelar</button>
+    </div>
+    <div class="horarios">
+      <div>
+        <label>Início</label>
+        <input type="time" id="horaInicio" readonly>
+      </div>
+      <div>
+        <label>Fim</label>
+        <input type="time" id="horaFim" readonly>
+      </div>
+    </div>
+
+    <div class="dupla-box">
+      <div class="linha">
+        <select id="selectTime1"><option value="">— time 1 —</option></select>
+        <input type="number" class="placar" id="placar1" min="0" placeholder="0">
+        <button class="btn-ponto btn-mais" data-alvo="placar1" disabled>+</button>
+        <button class="btn-ponto btn-menos" data-alvo="placar1" disabled>−</button>
+      </div>
+      <div class="jogadores-info vazio" id="infoTime1">Nenhum time selecionado</div>
+    </div>
+
+    <div class="dupla-box">
+      <div class="linha">
+        <select id="selectTime2"><option value="">— time 2 —</option></select>
+        <input type="number" class="placar" id="placar2" min="0" placeholder="0">
+        <button class="btn-ponto btn-mais" data-alvo="placar2" disabled>+</button>
+        <button class="btn-ponto btn-menos" data-alvo="placar2" disabled>−</button>
+      </div>
+      <div class="jogadores-info vazio" id="infoTime2">Nenhum time selecionado</div>
+    </div>
+
+    <div class="acoes-partida">
+      <button class="btn btn-azul" id="btnInicio">▶ Início</button>
+      <button class="btn btn-amarelo" id="btnFim" disabled>⏹ Fim</button>
+    </div>
+  </div>
+
+  <!-- PARTIDAS DO DIA -->
+  <div class="card card-partidas">
+    <h2>📋 Partidas do dia <span class="spacer"></span><span class="badge" id="badgePart">0</span></h2>
+    <div class="lista" id="listaPartidas">
+      <div class="vazio-msg">Nenhuma partida registrada ainda.</div>
+    </div>
+  </div>
+
+  <button class="btn btn-azul" id="btnHistorico" style="width:100%;padding:14px;font-size:15px">📜 Histórico</button>
+
+</div>
+
+<!-- OVERLAY HISTÓRICO -->
+<div class="overlay hidden" id="overlayHist">
+  <div class="overlay-conteudo">
+    <div class="overlay-header">
+      <h2>📜 Histórico</h2>
+      <button class="btn-close" id="btnFechaHist">×</button>
+    </div>
+    <div id="listaHistorico"></div>
+
+    <div class="secao-hist">
+      <h3>📄 Exportar extrato (.txt)</h3>
+      <div class="campo">
+        <label>Data</label>
+        <select id="selectDataExport"></select>
+      </div>
+      <div class="campo">
+        <label>Formato</label>
+        <select id="selectFormatoExport">
+          <option value="simples">Jogos / Vitórias (com listagem)</option>
+          <option value="pontos">Jogos / Vitórias + Pontos</option>
+        </select>
+      </div>
+      <button class="btn btn-azul" id="btnExportarTxt" style="width:100%">⬇️ Exportar .txt</button>
+    </div>
+
+    <div class="secao-hist">
+      <h3>💾 Backup (.json)</h3>
+      <button class="btn btn-azul" id="btnExportarBackup" style="width:100%;margin-bottom:8px">📤 Exportar backup</button>
+      <button class="btn btn-cinza" id="btnImportarBackup" style="width:100%">📥 Importar backup</button>
+      <input type="file" id="inputBackup" accept=".json,application/json" class="hidden">
+    </div>
+  </div>
+</div>
+
+<!-- MODAL TIME -->
+<div class="modal hidden" id="modalTime">
+  <div class="modal-box">
+    <h3 id="modalTimeTitulo">Novo time</h3>
+    <label style="font-size:11px;color:var(--cinza);text-transform:uppercase;letter-spacing:.5px;font-weight:600;display:block;margin-bottom:4px">Nome do time</label>
+    <input type="text" id="modalTimeNome" class="nome-input" placeholder="Nome do time" autocapitalize="characters" autocomplete="off">
+    <div style="font-size:11px;color:var(--cinza);text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin:12px 0 4px 0">Jogadores</div>
+    <div class="modal-lista" id="modalListaJog"></div>
+    <div class="contador-sel" id="modalContador">0 selecionados</div>
+    <div class="modal-acoes">
+      <button class="btn btn-cinza" id="btnModalCancela">Cancelar</button>
+      <button class="btn btn-azul" id="btnModalSalva">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL TEXTO (colar/copiar manual) -->
+<div class="modal hidden" id="modalTexto">
+  <div class="modal-box">
+    <h3 id="modalTextoTitulo">Colar partida</h3>
+    <p style="font-size:13px;color:var(--cinza);margin:0 0 10px 0" id="modalTextoInstrucao">Cole o conteúdo JSON abaixo:</p>
+    <textarea id="modalTextoArea"></textarea>
+    <div class="modal-acoes">
+      <button class="btn btn-cinza" id="btnTextoCancela">Cancelar</button>
+      <button class="btn btn-azul" id="btnTextoConfirma">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// VÔLEI DA MAROLA — app.js (inline)
+// ============================================================
+
+const CHAVE_DB   = "volei_da_marola";
+const CHAVE_TEMA = "volei_da_marola_tema";
+const HOJE = new Date().toISOString().slice(0,10);
+
+let DB = { versao: 1, dias: {} };
+let partidaEmAndamento = false;
+let partidaEditando = null;   // { id, index } ou null
+let timeEditandoModal = null; // { id } ou null (novo)
+let chipsSelecionadosTemp = new Set();
+
+// ---------- Utilidades ----------
+const $ = (id) => document.getElementById(id);
+const normalizarNome = (s) => (s || "").trim().toUpperCase();
+const normalizarNomesArray = (arr) => (arr || []).map(normalizarNome).filter(Boolean);
+const gerarId = (prefixo) => prefixo + Date.now() + "_" + Math.random().toString(36).slice(2,7);
+const vibrar = (ms=8) => { if (navigator.vibrate) navigator.vibrate(ms); };
+
+function mostrarToast(msg, ms=2200){
+  const t = $("toast");
+  t.textContent = msg;
+  t.classList.add("ativo");
+  clearTimeout(t._timer);
+  t._timer = setTimeout(()=>t.classList.remove("ativo"), ms);
+}
+
+function fmtDataBR(iso){
+  const [a,m,d] = iso.split("-");
+  return `${d}/${m}/${a}`;
+}
+function fmtDataCurta(iso){
+  const [a,m,d] = iso.split("-");
+  return `${d}/${m}`;
+}
+
+// ---------- Persistência ----------
+function carregar(){
+  try{
+    const raw = localStorage.getItem(CHAVE_DB);
+    if (raw){
+      const obj = JSON.parse(raw);
+      if (obj && obj.dias) DB = obj;
+    }
+  }catch(e){ console.warn("Erro ao carregar DB:", e); }
+
+  if (!DB.dias[HOJE]){
+    DB.dias[HOJE] = { jogadores: [], times: [], partidas: [] };
+  }
+  // garantir campos em dias antigos
+  for (const d in DB.dias){
+    const dia = DB.dias[d];
+    if (!Array.isArray(dia.jogadores)) dia.jogadores = [];
+    if (!Array.isArray(dia.times)) dia.times = [];
+    if (!Array.isArray(dia.partidas)) dia.partidas = [];
+  }
+}
+function salvar(){
+  try{
+    localStorage.setItem(CHAVE_DB, JSON.stringify(DB));
+  }catch(e){
+    mostrarToast("Erro ao salvar dados");
+    console.error(e);
+  }
+}
+
+// ---------- Tema ----------
+function aplicarTema(tema){
+  if (tema === "escuro"){
+    document.body.classList.add("escuro");
+    $("btnTema").textContent = "☀️";
+    document.querySelector('meta[name="theme-color"]').setAttribute("content","#0d1518");
+  } else {
+    document.body.classList.remove("escuro");
+    $("btnTema").textContent = "🌙";
+    document.querySelector('meta[name="theme-color"]').setAttribute("content","#0d7377");
+  }
+  localStorage.setItem(CHAVE_TEMA, tema);
+}
+function carregarTema(){
+  const salvo = localStorage.getItem(CHAVE_TEMA);
+  if (salvo) { aplicarTema(salvo); return; }
+  const prefere = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  aplicarTema(prefere ? "escuro" : "claro");
+}
+$("btnTema").addEventListener("click", ()=>{
+  const atual = document.body.classList.contains("escuro") ? "escuro" : "claro";
+  aplicarTema(atual === "escuro" ? "claro" : "escuro");
+});
+
+// ============================================================
+// JOGADORES
+// ============================================================
+let jogadorEditando = null;
+
+function renderJogadores(){
+  const dia = DB.dias[HOJE];
+  const box = $("chipsJogadores");
+  box.innerHTML = "";
+  dia.jogadores.forEach(nome=>{
+    const chip = document.createElement("div");
+    chip.className = "chip" + (jogadorEditando === nome ? " editando" : "");
+    chip.textContent = nome;
+    chip.dataset.nome = nome;
+
+    // clique curto → edita
+    let timerLongo = null;
+    let suprimiu = false;
+
+    chip.addEventListener("pointerdown", (e)=>{
+      suprimiu = false;
+      timerLongo = setTimeout(()=>{
+        suprimiu = true;
+        if (confirm(`Excluir o jogador "${nome}"?`)){
+          excluirJogador(nome);
+        }
+      }, 600);
+    });
+    chip.addEventListener("pointerup", ()=>{
+      if (timerLongo) clearTimeout(timerLongo);
+      if (!suprimiu) editarJogador(nome);
+    });
+    chip.addEventListener("pointerleave", ()=>{
+      if (timerLongo) clearTimeout(timerLongo);
+    });
+    chip.addEventListener("contextmenu",(e)=>{
+      e.preventDefault();
+      if (confirm(`Excluir o jogador "${nome}"?`)) excluirJogador(nome);
+    });
+    box.appendChild(chip);
+  });
+  $("badgeJog").textContent = dia.jogadores.length;
+}
+
+function editarJogador(nome){
+  jogadorEditando = nome;
+  $("inputJogador").value = nome;
+  $("btnConfirmaJog").textContent = "💾";
+  $("btnCancelaJog").classList.remove("hidden");
+  $("inputJogador").focus();
+  renderJogadores();
+}
+
+function cancelarEdicaoJogador(){
+  jogadorEditando = null;
+  $("inputJogador").value = "";
+  $("btnConfirmaJog").textContent = "✓";
+  $("btnCancelaJog").classList.add("hidden");
+  renderJogadores();
+}
+
+function confirmarJogador(){
+  const nome = normalizarNome($("inputJogador").value);
+  if (!nome){ mostrarToast("Digite um nome"); return; }
+  const dia = DB.dias[HOJE];
+
+  if (jogadorEditando){
+    // editar
+    if (nome !== jogadorEditando && dia.jogadores.includes(nome)){
+      mostrarToast("Já existe um jogador com esse nome");
+      return;
+    }
+    const idx = dia.jogadores.indexOf(jogadorEditando);
+    if (idx >= 0) dia.jogadores[idx] = nome;
+    // atualiza nos times? não — snapshot preservado.
+    jogadorEditando = null;
+    $("btnConfirmaJog").textContent = "✓";
+    $("btnCancelaJog").classList.add("hidden");
+    mostrarToast("Jogador atualizado");
+  } else {
+    if (dia.jogadores.includes(nome)){
+      mostrarToast("Jogador já cadastrado");
+      return;
+    }
+    dia.jogadores.push(nome);
+    mostrarToast("Jogador adicionado");
+  }
+  $("inputJogador").value = "";
+  salvar();
+  renderJogadores();
+  renderTimes();
+}
+
+function excluirJogador(nome){
+  const dia = DB.dias[HOJE];
+  const idx = dia.jogadores.indexOf(nome);
+  if (idx < 0) return;
+  dia.jogadores.splice(idx, 1);
+  if (jogadorEditando === nome) cancelarEdicaoJogador();
+  salvar();
+  renderJogadores();
+  mostrarToast("Jogador removido");
+  vibrar(15);
+  // NÃO remove dos times (snapshot preservado)
+}
+
+$("btnConfirmaJog").addEventListener("click", confirmarJogador);
+$("btnCancelaJog").addEventListener("click", cancelarEdicaoJogador);
+$("inputJogador").addEventListener("keydown", (e)=>{
+  if (e.key === "Enter"){ e.preventDefault(); confirmarJogador(); }
+  if (e.key === "Escape"){ cancelarEdicaoJogador(); }
+});
+$("inputJogador").addEventListener("input", (e)=>{
+  e.target.value = e.target.value.toUpperCase();
+});
+
+// ============================================================
+// TIMES
+// ============================================================
+function renderTimes(){
+  const dia = DB.dias[HOJE];
+  const box = $("listaTimes");
+  box.innerHTML = "";
+  if (dia.times.length === 0){
+    box.innerHTML = '<div class="vazio-msg">Nenhum time cadastrado ainda.</div>';
+  } else {
+    dia.times.forEach(t=>{
+      const el = document.createElement("div");
+      el.className = "time-card";
+      el.innerHTML = `
+        <div style="flex:1">
+          <div class="nome-time">${t.nome}</div>
+          <div class="qtd">${t.jogadores.length} jogador${t.jogadores.length===1?"":"es"}</div>
+        </div>
+        <button class="btn-mini" data-acao="editar">✏</button>
+        <button class="btn-mini" data-acao="excluir">🗑</button>
+      `;
+      el.addEventListener("click",(e)=>{
+        const acao = e.target.dataset.acao;
+        if (acao === "editar"){ abrirModalTime(t.id); }
+        else if (acao === "excluir"){ excluirTime(t.id); }
+        else { abrirModalTime(t.id); } // clique no card abre o modal
+      });
+      box.appendChild(el);
+    });
+  }
+  $("badgeTimes").textContent = dia.times.length;
+  atualizarSelectsTimes();
+}
+
+function atualizarSelectsTimes(){
+  const dia = DB.dias[HOJE];
+  ["selectTime1","selectTime2"].forEach(sid=>{
+    const sel = $(sid);
+    const valorAtual = sel.value;
+    sel.innerHTML = '<option value="">— selecione —</option>';
+    dia.times.forEach(t=>{
+      const opt = document.createElement("option");
+      opt.value = t.id;
+      opt.textContent = t.nome;
+      sel.appendChild(opt);
+    });
+    if (dia.times.some(t=>t.id === valorAtual)) sel.value = valorAtual;
+  });
+  atualizarInfoTimes();
+}
+
+function atualizarInfoTimes(){
+  const dia = DB.dias[HOJE];
+  [[$("selectTime1"), $("infoTime1")], [$("selectTime2"), $("infoTime2")]].forEach(([sel,info])=>{
+    const t = dia.times.find(x=>x.id === sel.value);
+    if (t){
+      info.textContent = t.jogadores.length ? t.jogadores.join(" / ") : "Time sem jogadores";
+      info.classList.toggle("vazio", t.jogadores.length === 0);
+    } else {
+      info.textContent = "Nenhum time selecionado";
+      info.classList.add("vazio");
+    }
+  });
+}
+
+function abrirModalTime(id){
+  const dia = DB.dias[HOJE];
+  let time = null;
+  if (id){
+    time = dia.times.find(t=>t.id === id);
+    if (!time) return;
+    timeEditandoModal = id;
+    $("modalTimeTitulo").textContent = "Editar time";
+    $("modalTimeNome").value = time.nome;
+    chipsSelecionadosTemp = new Set(time.jogadores);
+  } else {
+    timeEditandoModal = null;
+    $("modalTimeTitulo").textContent = "Novo time";
+    $("modalTimeNome").value = "";
+    chipsSelecionadosTemp = new Set();
+  }
+
+  const lista = $("modalListaJog");
+  lista.innerHTML = "";
+  if (dia.jogadores.length === 0){
+    lista.innerHTML = '<div class="vazio-msg">Nenhum jogador cadastrado. Cadastre jogadores primeiro.</div>';
+  } else {
+    dia.jogadores.forEach(nome=>{
+      const lbl = document.createElement("label");
+      const cb = document.createElement("input");
+      cb.type = "checkbox";
+      cb.value = nome;
+      cb.checked = chipsSelecionadosTemp.has(nome);
+      cb.addEventListener("change",()=>{
+        if (cb.checked) chipsSelecionadosTemp.add(nome);
+        else chipsSelecionadosTemp.delete(nome);
+        $("modalContador").textContent = `${chipsSelecionadosTemp.size} selecionado${chipsSelecionadosTemp.size===1?"":"s"}`;
+      });
+      lbl.appendChild(cb);
+      lbl.appendChild(document.createTextNode(nome));
+      lista.appendChild(lbl);
+    });
+  }
+  $("modalContador").textContent = `${chipsSelecionadosTemp.size} selecionado${chipsSelecionadosTemp.size===1?"":"s"}`;
+  $("modalTime").classList.remove("hidden");
+  setTimeout(()=>$("modalTimeNome").focus(), 100);
+}
+
+function fecharModalTime(){
+  $("modalTime").classList.add("hidden");
+  timeEditandoModal = null;
+  chipsSelecionadosTemp = new Set();
+}
+
+function salvarModalTime(){
+  const dia = DB.dias[HOJE];
+  const nome = normalizarNome($("modalTimeNome").value);
+  if (!nome){ mostrarToast("Digite o nome do time"); return; }
+  const jogadoresSel = Array.from(chipsSelecionadosTemp);
+
+  if (timeEditandoModal){
+    const t = dia.times.find(x=>x.id === timeEditandoModal);
+    if (!t) return;
+    if (dia.times.some(x=>x.id !== t.id && x.nome === nome)){
+      mostrarToast("Já existe um time com esse nome");
+      return;
+    }
+    t.nome = nome;
+    t.jogadores = jogadoresSel;
+    mostrarToast("Time atualizado");
+  } else {
+    if (dia.times.some(x=>x.nome === nome)){
+      mostrarToast("Já existe um time com esse nome");
+      return;
+    }
+    dia.times.push({ id: gerarId("t_"), nome, jogadores: jogadoresSel });
+    mostrarToast("Time criado");
+  }
+  salvar();
+  fecharModalTime();
+  renderTimes();
+  renderPartidas();
+}
+
+function excluirTime(id){
+  const dia = DB.dias[HOJE];
+  const t = dia.times.find(x=>x.id === id);
+  if (!t) return;
+  const usados = dia.partidas.filter(p=>p.time1?.id === id || p.time2?.id === id).length;
+  let msg = `Excluir o time "${t.nome}"?`;
+  if (usados > 0) msg += `\n\nEste time aparece em ${usados} partida(s) já salva(s). As partidas NÃO serão alteradas.`;
+  if (!confirm(msg)) return;
+
+  dia.times = dia.times.filter(x=>x.id !== id);
+  salvar();
+  renderTimes();
+  mostrarToast("Time excluído");
+  vibrar(15);
+}
+
+$("btnAddTime").addEventListener("click", ()=>{
+  const nome = normalizarNome($("inputTime").value);
+  if (!nome){ mostrarToast("Digite o nome do time"); return; }
+  const dia = DB.dias[HOJE];
+  if (dia.times.some(t=>t.nome === nome)){
+    mostrarToast("Já existe um time com esse nome");
+    return;
+  }
+  // cria vazio e abre modal já com nome preenchido
+  const novo = { id: gerarId("t_"), nome, jogadores: [] };
+  dia.times.push(novo);
+  salvar();
+  $("inputTime").value = "";
+  renderTimes();
+  abrirModalTime(novo.id);
+});
+$("inputTime").addEventListener("input",(e)=>{ e.target.value = e.target.value.toUpperCase(); });
+$("inputTime").addEventListener("keydown",(e)=>{
+  if (e.key === "Enter"){ e.preventDefault(); $("btnAddTime").click(); }
+});
+
+$("btnModalCancela").addEventListener("click", fecharModalTime);
+$("btnModalSalva").addEventListener("click", salvarModalTime);
+$("modalTimeNome").addEventListener("input",(e)=>{ e.target.value = e.target.value.toUpperCase(); });
+
+// ============================================================
+// PARTIDA EM ANDAMENTO
+// ============================================================
+function atualizarBotoes(){
+  const podeMarcar = !!(partidaEmAndamento || partidaEditando);
+  document.querySelectorAll(".btn-ponto").forEach(b=>b.disabled = !podeMarcar);
+  $("btnFim").disabled = !podeMarcar;
+  $("btnInicio").disabled = partidaEmAndamento || !!partidaEditando;
+  $("horaInicio").readOnly = !partidaEditando;
+  $("horaFim").readOnly = !partidaEditando;
+}
+
+function limparFormulario(){
+  $("selectTime1").value = "";
+  $("selectTime2").value = "";
+  $("placar1").value = "";
+  $("placar2").value = "";
+  $("horaInicio").value = "";
+  $("horaFim").value = "";
+  atualizarInfoTimes();
+}
+
+function iniciarPartida(){
+  const dia = DB.dias[HOJE];
+  if (dia.times.length < 2){
+    mostrarToast("Cadastre pelo menos 2 times");
+    return;
+  }
+  const agora = new Date();
+  const hh = String(agora.getHours()).padStart(2,"0");
+  const mm = String(agora.getMinutes()).padStart(2,"0");
+  $("horaInicio").value = `${hh}:${mm}`;
+  $("horaFim").value = "";
+  $("placar1").value = "";
+  $("placar2").value = "";
+  partidaEmAndamento = true;
+  atualizarBotoes();
+  mostrarToast("Partida iniciada — marque os pontos");
+  vibrar(20);
+}
+
+function validarPartida(){
+  const t1 = $("selectTime1").value;
+  const t2 = $("selectTime2").value;
+  if (!t1 || !t2){ mostrarToast("Selecione os dois times"); return null; }
+  if (t1 === t2){ mostrarToast("Um time não pode jogar contra si mesmo"); return null; }
+
+  const dia = DB.dias[HOJE];
+  const time1 = dia.times.find(x=>x.id === t1);
+  const time2 = dia.times.find(x=>x.id === t2);
+  if (!time1 || !time2){ mostrarToast("Time não encontrado"); return null; }
+  if (time1.jogadores.length === 0 || time2.jogadores.length === 0){
+    mostrarToast("Os dois times precisam ter pelo menos 1 jogador");
+    return null;
+  }
+
+  // Regra: nenhum jogador pode estar nos dois times
+  const comuns = time1.jogadores.filter(j=>time2.jogadores.includes(j));
+  if (comuns.length > 0){
+    mostrarToast(`${comuns[0]} está nos dois times. Um jogador não pode jogar pelos dois lados na mesma partida.`, 3500);
+    return null;
+  }
+
+  const p1 = parseInt($("placar1").value, 10);
+  const p2 = parseInt($("placar2").value, 10);
+  if (isNaN(p1) || isNaN(p2) || p1 < 0 || p2 < 0){
+    mostrarToast("Informe os placares"); return null;
+  }
+  if (p1 === p2){ mostrarToast("Não existe empate no vôlei de areia"); return null; }
+  if (Math.abs(p1-p2) < 2){ mostrarToast("A diferença mínima é de 2 pontos"); return null; }
+
+  const hIni = $("horaInicio").value;
+  let hFim = $("horaFim").value;
+  if (!hIni){ mostrarToast("Hora de início ausente"); return null; }
+  if (!hFim){
+    const a = new Date();
+    hFim = `${String(a.getHours()).padStart(2,"0")}:${String(a.getMinutes()).padStart(2,"0")}`;
+    $("horaFim").value = hFim;
+  }
+
+  return {
+    time1: { id: time1.id, nome: time1.nome, jogadores: [...time1.jogadores], placar: p1 },
+    time2: { id: time2.id, nome: time2.nome, jogadores: [...time2.jogadores], placar: p2 },
+    horaInicio: hIni,
+    horaFim: hFim
+  };
+}
+
+function finalizarPartida(){
+  const dados = validarPartida();
+  if (!dados) return;
+  const dia = DB.dias[HOJE];
+
+  if (partidaEditando){
+    const p = dia.partidas.find(x=>x.id === partidaEditando.id);
+    if (p){
+      Object.assign(p, dados);
+    }
+    mostrarToast("Partida atualizada");
+    cancelarEdicao();
+  } else {
+    const nova = {
+      id: gerarId("p_"),
+      ...dados
+    };
+    dia.partidas.push(nova);
+    mostrarToast("Partida registrada");
+    partidaEmAndamento = false;
+    limparFormulario();
+  }
+  salvar();
+  renderPartidas();
+  atualizarBotoes();
+}
+
+function cancelarEdicao(){
+  partidaEditando = null;
+  $("bannerEdicao").classList.add("hidden");
+  $("btnFim").textContent = "⏹ Fim";
+  $("btnFim").classList.remove("btn-azul");
+  $("btnFim").classList.add("btn-amarelo");
+  limparFormulario();
+  renderPartidas();
+  atualizarBotoes();
+}
+
+$("btnInicio").addEventListener("click", iniciarPartida);
+$("btnFim").addEventListener("click", finalizarPartida);
+$("btnCancelaEdicao").addEventListener("click", cancelarEdicao);
+
+// Botões + e −
+document.querySelectorAll(".btn-ponto").forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    const alvo = btn.dataset.alvo;
+    const input = $(alvo);
+    const delta = btn.classList.contains("btn-mais") ? 1 : -1;
+    let v = parseInt(input.value, 10);
+    if (isNaN(v)) v = 0;
+    v = Math.max(0, v + delta);
+    input.value = v;
+    vibrar(8);
+  });
+});
+
+// Atualiza info ao trocar time
+$("selectTime1").addEventListener("change", atualizarInfoTimes);
+$("selectTime2").addEventListener("change", atualizarInfoTimes);
+
+// ============================================================
+// LISTA DE PARTIDAS DO DIA
+// ============================================================
+function calcularDuracao(inicio, fim){
+  if (!inicio || !fim) return "—";
+  const [h1,m1] = inicio.split(":").map(Number);
+  const [h2,m2] = fim.split(":").map(Number);
+  let min = (h2*60+m2) - (h1*60+m1);
+  if (min < 0) min += 24*60;
+  const h = Math.floor(min/60);
+  const m = min%60;
+  return h > 0 ? `${h}h${String(m).padStart(2,"0")}min` : `${m}min`;
+}
+
+function renderPartidas(){
+  const dia = DB.dias[HOJE];
+  const lista = $("listaPartidas");
+  lista.innerHTML = "";
+  if (dia.partidas.length === 0){
+    lista.innerHTML = '<div class="vazio-msg">Nenhuma partida registrada ainda.</div>';
+  } else {
+    dia.partidas.forEach((p, i)=>{
+      const vencedor = p.time1.placar > p.time2.placar ? "time1" : "time2";
+      const item = document.createElement("div");
+      item.className = "partida-item" + (partidaEditando?.id === p.id ? " editando" : "");
+      const dur = calcularDuracao(p.horaInicio, p.horaFim);
+
+      const jogadoresHTML = `
+        <div class="partida-jogadores">
+          <div class="linha-j"><span class="rotulo">${p.time1.nome}:</span><span>${p.time1.jogadores.join(" / ")}</span></div>
+          <div class="linha-j"><span class="rotulo">${p.time2.nome}:</span><span>${p.time2.jogadores.join(" / ")}</span></div>
+        </div>
+      `;
+
+      item.innerHTML = `
+        <div class="partida-header">
+          <span class="num">jogo ${i+1}</span>
+          <span>${p.horaInicio} / ${p.horaFim} — ${dur}</span>
+          <span class="spacer"></span>
+          <button class="btn-mini" data-acao="copiar" title="Copiar">📋</button>
+          <button class="btn-mini" data-acao="compartilhar" title="Compartilhar">🔗</button>
+          <button class="btn-mini" data-acao="editar" title="Editar">✏</button>
+          <button class="btn-mini" data-acao="excluir" title="Excluir">🗑</button>
+        </div>
+        <div class="partida-linha ${vencedor==="time1"?"vencedor":"perdedor"}">
+          <span class="nome-time">${p.time1.nome}</span>
+          <span class="placar-time">${p.time1.placar}</span>
+          <span class="trofeu">${vencedor==="time1"?"🏆":""}</span>
+        </div>
+        <div class="partida-linha ${vencedor==="time2"?"vencedor":"perdedor"}">
+          <span class="nome-time">${p.time2.nome}</span>
+          <span class="placar-time">${p.time2.placar}</span>
+          <span class="trofeu">${vencedor==="time2"?"🏆":""}</span>
+        </div>
+        <button class="toggle-jogadores" data-acao="toggle">▸ ver jogadores</button>
+        <div class="partida-jogadores hidden">${jogadoresHTML.replace('<div class="partida-jogadores">','').replace(/<\/div>$/,'')}</div>
+      `;
+
+      // corrige estrutura (o replace acima ficou feio); refaz de forma limpa:
+      const toggle = item.querySelector('[data-acao="toggle"]');
+      const jogDiv = item.querySelector(".partida-jogadores");
+      toggle.addEventListener("click", ()=>{
+        jogDiv.classList.toggle("hidden");
+        toggle.textContent = jogDiv.classList.contains("hidden") ? "▸ ver jogadores" : "▾ ocultar jogadores";
+      });
+
+      item.addEventListener("click",(e)=>{
+        const acao = e.target.dataset.acao;
+        if (!acao) return;
+        if (acao === "editar") editarPartida(p.id);
+        else if (acao === "excluir") excluirPartida(p.id);
+        else if (acao === "copiar") copiarPartida(p.id);
+        else if (acao === "compartilhar") compartilharPartida(p.id);
+      });
+      lista.appendChild(item);
+    });
+  }
+  $("badgePart").textContent = dia.partidas.length;
+}
+
+function editarPartida(id){
+  const dia = DB.dias[HOJE];
+  const p = dia.partidas.find(x=>x.id === id);
+  if (!p) return;
+  const idx = dia.partidas.indexOf(p);
+
+  partidaEditando = { id, index: idx };
+  partidaEmAndamento = false;
+
+  $("selectTime1").value = p.time1.id;
+  $("selectTime2").value = p.time2.id;
+  $("placar1").value = p.time1.placar;
+  $("placar2").value = p.time2.placar;
+  $("horaInicio").value = p.horaInicio;
+  $("horaFim").value = p.horaFim;
+
+  // Se os times não existem mais no cadastro, adiciona opção temporária
+  [["selectTime1", p.time1], ["selectTime2", p.time2]].forEach(([sid, t])=>{
+    const sel = $(sid);
+    if (!Array.from(sel.options).some(o=>o.value === t.id)){
+      const opt = document.createElement("option");
+      opt.value = t.id;
+      opt.textContent = t.nome + " (importado)";
+      sel.appendChild(opt);
+    }
+    sel.value = t.id;
+  });
+
+  atualizarInfoTimes();
+
+  $("bannerEdicao").classList.remove("hidden");
+  $("numEditando").textContent = idx + 1;
+  $("btnFim").textContent = "💾 Salvar";
+  $("btnFim").classList.remove("btn-amarelo");
+  $("btnFim").classList.add("btn-azul");
+  atualizarBotoes();
+  renderPartidas();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function excluirPartida(id){
+  const dia = DB.dias[HOJE];
+  const p = dia.partidas.find(x=>x.id === id);
+  if (!p) return;
+  if (!confirm(`Excluir jogo ${dia.partidas.indexOf(p)+1}?`)) return;
+  dia.partidas = dia.partidas.filter(x=>x.id !== id);
+  if (partidaEditando?.id === id) cancelarEdicao();
+  salvar();
+  renderPartidas();
+  mostrarToast("Partida excluída");
+  vibrar(15);
+}
+
+// ============================================================
+// COMPARTILHAR / COPIAR / IMPORTAR PARTIDA
+// ============================================================
+function montarPacotePartida(p){
+  return {
+    app: "volei_da_marola",
+    tipo: "partida",
+    versao: 1,
+    exportadoEm: new Date().toISOString(),
+    origem: { dataOriginal: HOJE, registradoEm: new Date().toISOString() },
+    partida: {
+      id: p.id,
+      horaInicio: p.horaInicio,
+      horaFim: p.horaFim,
+      time1: { ...p.time1 },
+      time2: { ...p.time2 }
+    }
+  };
+}
+
+async function compartilharPartida(id){
+  const dia = DB.dias[HOJE];
+  const p = dia.partidas.find(x=>x.id === id);
+  if (!p) return;
+  const pacote = montarPacotePartida(p);
+  const json = JSON.stringify(pacote, null, 2);
+  const nomeArq = `partida_${HOJE}_${p.horaInicio.replace(":","")}_${p.id.slice(-5)}.json`;
+
+  // tenta share
+  try{
+    const file = new File([json], nomeArq, { type: "text/plain" });
+    if (navigator.canShare && navigator.canShare({ files: [file] })){
+      await navigator.share({ files: [file], title: "Partida Vôlei da Marola" });
+      return;
+    }
+    throw new Error("share indisponível");
+  }catch(err){
+    if (err.name === "AbortError") return;
+    // fallback download
+    try{
+      const blob = new Blob([json], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url; a.download = nomeArq;
+      document.body.appendChild(a); a.click();
+      setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 500);
+      mostrarToast("Compartilhamento indisponível. Arquivo baixado.");
+    }catch(e2){
+      window.open("data:application/json;charset=utf-8,"+encodeURIComponent(json), "_blank");
+      mostrarToast("Arquivo aberto em nova aba");
+    }
+  }
+}
+
+async function copiarPartida(id){
+  const dia = DB.dias[HOJE];
+  const p = dia.partidas.find(x=>x.id === id);
+  if (!p) return;
+  const json = JSON.stringify(montarPacotePartida(p), null, 2);
+  try{
+    await navigator.clipboard.writeText(json);
+    vibrar(10);
+    mostrarToast("Partida copiada! Cole no WhatsApp/e-mail.");
+  }catch(e){
+    // fallback
+    const ta = document.createElement("textarea");
+    ta.value = json;
+    ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    try{
+      document.execCommand("copy");
+      mostrarToast("Partida copiada!");
+    }catch(e2){
+      abrirModalTexto("Copiar partida", "Copie o texto abaixo:", json);
+    }
+    ta.remove();
+  }
+}
+
+function processarImportacaoPartida(texto){
+  let obj;
+  try{
+    obj = JSON.parse(texto);
+  }catch(e){
+    mostrarToast("Arquivo inválido: não é um JSON");
+    return;
+  }
+  if (!obj || obj.app !== "volei_da_marola"){
+    mostrarToast("Arquivo inválido. Não é do Vôlei da Marola.");
+    return;
+  }
+  if (obj.tipo !== "partida"){
+    mostrarToast("Este arquivo não é uma partida. Use a importação de backup.");
+    return;
+  }
+  const p = obj.partida;
+  if (!p || !p.id || !/^\d{2}:\d{2}$/.test(p.horaInicio) || !/^\d{2}:\d{2}$/.test(p.horaFim)){
+    mostrarToast("Arquivo de partida incompleto (id ou horários)");
+    return;
+  }
+  if (!p.time1 || !p.time2 || !Array.isArray(p.time1.jogadores) || !Array.isArray(p.time2.jogadores)){
+    mostrarToast("Arquivo de partida incompleto (times)");
+    return;
+  }
+  if (typeof p.time1.placar !== "number" || typeof p.time2.placar !== "number"){
+    mostrarToast("Arquivo de partida incompleto (placar)");
+    return;
+  }
+  if (p.time1.placar === p.time2.placar){
+    mostrarToast("Placar inválido: não existe empate");
+    return;
+  }
+  if (Math.abs(p.time1.placar - p.time2.placar) < 2){
+    mostrarToast("Placar inválido: diferença mínima de 2 pontos");
+    return;
+  }
+  const comuns = p.time1.jogadores.filter(j=>p.time2.jogadores.includes(j));
+  if (comuns.length > 0){
+    mostrarToast("Jogadores duplicados entre os times");
+    return;
+  }
+
+  const dia = DB.dias[HOJE];
+  if (dia.partidas.some(x=>x.id === p.id)){
+    mostrarToast("Esta partida já foi importada");
+    return;
+  }
+
+  const resumo = `${p.time1.nome} ${p.time1.placar} × ${p.time2.placar} ${p.time2.nome}`;
+  if (!confirm(`Importar partida?\n\n${resumo}\n\n${p.horaInicio} — ${p.horaFim}`)) return;
+
+  dia.partidas.push({
+    id: p.id,
+    horaInicio: p.horaInicio,
+    horaFim: p.horaFim,
+    time1: { ...p.time1, jogadores: [...p.time1.jogadores] },
+    time2: { ...p.time2, jogadores: [...p.time2.jogadores] }
+  });
+  // ordena por horário
+  dia.partidas.sort((a,b)=> a.horaInicio.localeCompare(b.horaInicio));
+
+  salvar();
+  renderPartidas();
+  mostrarToast("Partida importada!");
+}
+
+function abrirModalTexto(titulo, instrucao, valor){
+  $("modalTextoTitulo").textContent = titulo;
+  $("modalTextoInstrucao").textContent = instrucao;
+  $("modalTextoArea").value = valor || "";
+  $("modalTexto").classList.remove("hidden");
+}
+$("btnTextoCancela").addEventListener("click", ()=>{
+  $("modalTexto").classList.add("hidden");
+});
+$("btnTextoConfirma").addEventListener("click", ()=>{
+  const txt = $("modalTextoArea").value.trim();
+  $("modalTexto").classList.add("hidden");
+  if (txt) processarImportacaoPartida(txt);
+  else mostrarToast("Nada para importar");
+});
+
+// ============================================================
+// HISTÓRICO
+// ============================================================
+function renderHistorico(){
+  const box = $("listaHistorico");
+  box.innerHTML = "";
+  const datas = Object.keys(DB.dias).sort().reverse();
+  const comPartidas = datas.filter(d=>DB.dias[d].partidas.length > 0);
+  if (comPartidas.length === 0){
+    box.innerHTML = '<div class="vazio-msg">Nenhuma partida registrada ainda.</div>';
+  } else {
+    comPartidas.forEach(d=>{
+      const dia = DB.dias[d];
+      const bloco = document.createElement("div");
+      bloco.className = "dia-bloco";
+      bloco.innerHTML = `
+        <div class="dia-header">
+          <span class="data">${fmtDataBR(d)}</span>
+          <span class="qtd">${dia.partidas.length} jogo${dia.partidas.length===1?"":"s"}</span>
+          <button class="btn-lixo" data-acao="excluir-dia" title="Excluir dia">🗑</button>
+          <span class="seta">▼</span>
+        </div>
+        <div class="dia-partidas hidden"></div>
+      `;
+      const header = bloco.querySelector(".dia-header");
+      const conteudo = bloco.querySelector(".dia-partidas");
+      header.addEventListener("click", (e)=>{
+        if (e.target.dataset.acao === "excluir-dia") return;
+        conteudo.classList.toggle("hidden");
+        header.classList.toggle("aberto");
+      });
+      bloco.querySelector('[data-acao="excluir-dia"]').addEventListener("click",(e)=>{
+        e.stopPropagation();
+        excluirDiaCompleto(d);
+      });
+
+      // conteúdo
+      const linhas = dia.partidas.map((p, i)=>{
+        const v = p.time1.placar > p.time2.placar ? 1 : 2;
+        return `
+          <div style="padding:8px 0;border-bottom:1px dashed var(--borda);font-size:13px">
+            <div style="font-size:11px;color:var(--cinza);margin-bottom:2px">jogo ${i+1} — ${p.horaInicio}/${p.horaFim}</div>
+            <div style="color:${v===1?"var(--azul)":"var(--cinza)"};font-weight:${v===1?"700":"400"}">${p.time1.nome} <strong>${p.time1.placar}</strong></div>
+            <div style="color:${v===2?"var(--azul)":"var(--cinza)"};font-weight:${v===2?"700":"400"}">${p.time2.nome} <strong>${p.time2.placar}</strong></div>
+          </div>
+        `;
+      }).join("");
+      conteudo.innerHTML = linhas;
+      box.appendChild(bloco);
+    });
+  }
+
+  // select de exportação
+  const sel = $("selectDataExport");
+  sel.innerHTML = "";
+  datas.forEach(d=>{
+    const opt = document.createElement("option");
+    opt.value = d;
+    opt.textContent = fmtDataBR(d) + (DB.dias[d].partidas.length ? ` — ${DB.dias[d].partidas.length} jogo(s)` : " — vazio");
+    sel.appendChild(opt);
+  });
+  if (datas.length === 0){
+    const opt = document.createElement("option");
+    opt.value = ""; opt.textContent = "Nenhuma data";
+    sel.appendChild(opt);
+  }
+}
+
+function excluirDiaCompleto(data){
+  const dia = DB.dias[data];
+  if (!dia) return;
+  const n = dia.partidas.length;
+  const msg = n > 0
+    ? `Excluir TODAS as ${n} partida(s) do dia ${fmtDataBR(data)}?\n\nEsta ação não pode ser desfeita.`
+    : `Excluir o dia ${fmtDataBR(data)} (sem partidas)?`;
+  if (!confirm(msg)) return;
+
+  if (data === HOJE){
+    DB.dias[HOJE] = { jogadores: [], times: [], partidas: [] };
+    cancelarEdicao();
+    renderJogadores();
+    renderTimes();
+    renderPartidas();
+  } else {
+    delete DB.dias[data];
+  }
+  if (partidaEditando){
+    const p = DB.dias[HOJE]?.partidas.find(x=>x.id === partidaEditando.id);
+    if (!p) cancelarEdicao();
+  }
+  salvar();
+  renderHistorico();
+  mostrarToast("Dia excluído");
+  vibrar(15);
+}
+
+$("btnHistorico").addEventListener("click", ()=>{
+  renderHistorico();
+  $("overlayHist").classList.remove("hidden");
+});
+$("btnFechaHist").addEventListener("click", ()=>{
+  $("overlayHist").classList.add("hidden");
+});
+
+// ============================================================
+// EXPORTAÇÃO .TXT
+// ============================================================
+function calcularEstatisticas(dia){
+  const mapa = {}; // nome → { jogos, vitorias, pontos }
+  dia.partidas.forEach(p=>{
+    const vencedor = p.time1.placar > p.time2.placar ? "time1" : "time2";
+    [["time1","time2"],["time2","time1"]].forEach(([lado, outro])=>{
+      p[lado].jogadores.forEach(j=>{
+        if (!mapa[j]) mapa[j] = { jogos: 0, vitorias: 0, pontos: 0 };
+        mapa[j].jogos++;
+        mapa[j].pontos += p[lado].placar;
+        if (vencedor === lado) mapa[j].vitorias++;
+      });
+    });
+  });
+  return mapa;
+}
+function calcularEstatisticasTimes(dia){
+  const mapa = {}; // nome do time → { jogos, vitorias, pontos }
+  dia.partidas.forEach(p=>{
+    const vencedor = p.time1.placar > p.time2.placar ? "time1" : "time2";
+    ["time1","time2"].forEach(lado=>{
+      const t = p[lado];
+      if (!mapa[t.nome]) mapa[t.nome] = { jogos: 0, vitorias: 0, pontos: 0 };
+      mapa[t.nome].jogos++;
+      mapa[t.nome].pontos += t.placar;
+      if (vencedor === lado) mapa[t.nome].vitorias++;
+    });
+  });
+  return mapa;
+}
+
+function gerarTxt(data, formato){
+  const dia = DB.dias[data];
+  if (!dia || dia.partidas.length === 0) return null;
+  const linhas = [];
+  linhas.push(fmtDataCurta(data));
+  linhas.push("");
+
+  if (formato === "simples"){
+    dia.partidas.forEach(p=>{
+      const vencedor = p.time1.placar > p.time2.placar ? "time1" : "time2";
+      linhas.push(`${p.time1.nome.padEnd(28)} ${vencedor==="time1"?"V":"D"}`);
+      linhas.push(`${p.time2.nome.padEnd(28)} ${vencedor==="time2"?"V":"D"}`);
+      linhas.push("");
+    });
+  }
+
+  // estatística por jogador
+  const est = calcularEstatisticas(dia);
+  const nomes = Object.keys(est).sort();
+  linhas.push("── POR JOGADOR ──");
+  nomes.forEach(n=>{
+    const e = est[n];
+    const stat = `${e.jogos}j/${e.vitorias}v`;
+    if (formato === "pontos"){
+      linhas.push(`${n.padEnd(20)} ${stat.padStart(8)}   ${(e.pontos+"pts").padStart(8)}`);
+    } else {
+      linhas.push(`${n.padEnd(20)} ${stat.padStart(8)}`);
+    }
+  });
+
+  // estatística por time
+  const estT = calcularEstatisticasTimes(dia);
+  const nomesT = Object.keys(estT).sort();
+  linhas.push("");
+  linhas.push("── POR TIME ──");
+  nomesT.forEach(n=>{
+    const e = estT[n];
+    const stat = `${e.jogos}j/${e.vitorias}v`;
+    if (formato === "pontos"){
+      linhas.push(`${n.padEnd(20)} ${stat.padStart(8)}   ${(e.pontos+"pts").padStart(8)}`);
+    } else {
+      linhas.push(`${n.padEnd(20)} ${stat.padStart(8)}`);
+    }
+  });
+
+  return linhas.join("\n");
+}
+
+$("btnExportarTxt").addEventListener("click", ()=>{
+  const data = $("selectDataExport").value;
+  const formato = $("selectFormatoExport").value;
+  if (!data){ mostrarToast("Nenhuma data disponível"); return; }
+  const txt = gerarTxt(data, formato);
+  if (!txt){ mostrarToast("Sem partidas nesse dia"); return; }
+  const nome = formato === "pontos"
+    ? `volei_marola_${data}_pontos.txt`
+    : `volei_marola_${data}.txt`;
+  const blob = new Blob([txt], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = nome;
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 500);
+  mostrarToast("Extrato exportado");
+});
+
+// ============================================================
+// BACKUP .JSON
+// ============================================================
+$("btnExportarBackup").addEventListener("click", ()=>{
+  const pacote = {
+    app: "volei_da_marola",
+    versao: 1,
+    exportadoEm: new Date().toISOString(),
+    dados: DB
+  };
+  const json = JSON.stringify(pacote, null, 2);
+  const nome = `volei_marola_backup_${HOJE}.json`;
+  const blob = new Blob([json], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = nome;
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 500);
+  mostrarToast("Backup exportado");
+});
+
+$("btnImportarBackup").addEventListener("click", ()=>{
+  $("inputBackup").click();
+});
+$("inputBackup").addEventListener("change", (e)=>{
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev)=>{
+    try{
+      const obj = JSON.parse(ev.target.result);
+      let novoDB = null;
+      if (obj && obj.app === "volei_da_marola" && obj.dados && obj.dados.dias){
+        novoDB = obj.dados;
+      } else if (obj && obj.dias && obj.versao){
+        novoDB = obj;
+      }
+      if (!novoDB){
+        mostrarToast("Backup inválido");
+        return;
+      }
+      // normaliza
+      for (const d in novoDB.dias){
+        const dia = novoDB.dias[d];
+        dia.jogadores = normalizarNomesArray(dia.jogadores || []);
+        dia.times = (dia.times || []).map(t=>({
+          id: t.id || gerarId("t_"),
+          nome: normalizarNome(t.nome || ""),
+          jogadores: normalizarNomesArray(t.jogadores || [])
+        }));
+        dia.partidas = (dia.partidas || []).map(p=>({
+          id: p.id || gerarId("p_"),
+          horaInicio: p.horaInicio || "00:00",
+          horaFim: p.horaFim || "00:00",
+          time1: {
+            id: p.time1?.id || "",
+            nome: normalizarNome(p.time1?.nome || "TIME 1"),
+            jogadores: normalizarNomesArray(p.time1?.jogadores || []),
+            placar: Number(p.time1?.placar) || 0
+          },
+          time2: {
+            id: p.time2?.id || "",
+            nome: normalizarNome(p.time2?.nome || "TIME 2"),
+            jogadores: normalizarNomesArray(p.time2?.jogadores || []),
+            placar: Number(p.time2?.placar) || 0
+          }
+        }));
+      }
+      if (!novoDB.dias[HOJE]) novoDB.dias[HOJE] = { jogadores: [], times: [], partidas: [] };
+      if (!confirm("Isso SUBSTITUIRÁ todos os dados atuais. Continuar?")) return;
+      DB = novoDB;
+      salvar();
+      cancelarEdicao();
+      renderJogadores();
+      renderTimes();
+      renderPartidas();
+      renderHistorico();
+      mostrarToast("Backup importado");
+    }catch(err){
+      mostrarToast("Arquivo inválido");
+      console.error(err);
+    } finally {
+      e.target.value = "";
+    }
+  };
+  reader.readAsText(file);
+});
+
+// ============================================================
+// INIT
+// ============================================================
+function atualizarDataHeader(){
+  const d = new Date();
+  const dias = ["dom","seg","ter","qua","qui","sex","sáb"];
+  const dd = String(d.getDate()).padStart(2,"0");
+  const mm = String(d.getMonth()+1).padStart(2,"0");
+  $("dataHoje").textContent = `${dias[d.getDay()]} ${dd}/${mm}`;
+}
+
+function init(){
+  carregarTema();
+  carregar();
+  atualizarDataHeader();
+  renderJogadores();
+  renderTimes();
+  renderPartidas();
+  atualizarBotoes();
+}
+init();
+
+</script>
+</body>
+</html>
